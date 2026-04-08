@@ -11,11 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        # Updated to v4 to fix the warning in your screenshot
         uses: actions/checkout@v4
 
       - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,6 +22,4 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          # Use ./ if you want to upload everything, 
-          # or the specific folder name if that's where your website files are.
           aws s3 sync ./Color-Inspector-Pro-main s3://${{ secrets.S3_BUCKET }} --delete
