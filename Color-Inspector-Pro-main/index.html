@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Color Inspector Pro - Advanced color analysis, conversion, and palette generation tool. Convert HEX, RGB, HSL, HSV, CMYK formats with live previews.">
+  <meta name="robots" content="index, follow">
+  <meta name="google-site-verification" content="faee5c3293aeb328" />
+  <title>Color Inspector Pro | Advanced Color Tool</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Color Inspector Pro | Advanced Color Tool">
+  <meta property="og:description" content="Advanced color analysis, conversion, and palette generation. Convert HEX, RGB, HSL, HSV, CMYK formats with live previews.">
+  <meta property="og:url" content="https://color-inspector-pro.vercel.app/">
+  <meta property="og:image" content="https://color-inspector-pro.vercel.app/og-image.png">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Color Inspector Pro | Advanced Color Tool">
+  <meta name="twitter:description" content="Convert HEX, RGB, HSL, HSV, CMYK with live color preview. Analyze, convert, and generate palettes.">
+  <meta name="twitter:image" content="https://color-inspector-pro.vercel.app/og-image.png">
+
+  <!-- Fonts and Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/main.css">
+</head>
+
+<body>
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🎨</div>
+                    <div class="logo-text">
+                        <h1 class="app-title">Color Inspector Pro</h1>
+                        <p class="app-subtitle">Advanced Color Analysis Tool</p>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle theme (T)">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <button class="mode-toggle" id="modeToggle" title="Toggle UI mode">
+                        <span class="mode-icon">⚡</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Color Input Section -->
+            <section class="color-input-panel">
+                <div class="input-methods">
+                    <div class="input-group">
+                        <label class="input-label">Color Picker</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="colorPicker" class="color-picker" value="#3B82F6">
+                            <div class="color-preview-large" id="colorPreviewLarge"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">HEX Code</label>
+                        <div class="hex-input-wrapper">
+                            <span class="hex-prefix">#</span>
+                            <input type="text" id="hexInput" class="hex-input" placeholder="3B82F6" maxlength="6">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Quick Actions</label>
+                        <div class="action-buttons">
+                            <button class="action-btn" id="randomColorBtn" title="Generate random color (R)">
+                                <span class="btn-icon">🎲</span>
+                                Random
+                            </button>
+                            <button class="action-btn" id="invertColorBtn" title="Invert current color (I)">
+                                <span class="btn-icon">🔄</span>
+                                Invert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preset Swatches -->
+                <div class="preset-swatches">
+                    <h3 class="section-title">Preset Colors</h3>
+                    <div class="swatch-grid" id="presetSwatches"></div>
+                </div>
+
+                <!-- Color History -->
+                <div class="color-history">
+                    <h3 class="section-title">Recent Colors</h3>
+                    <div class="history-grid" id="colorHistory"></div>
+                </div>
+            </section>
+
+            <!-- Color Formats Grid -->
+            <section class="color-formats-section">
+                <h2 class="section-title">Color Formats</h2>
+                <div class="formats-grid">
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">HEX</h3>
+                            <button class="copy-btn" data-format="hex" title="Copy HEX">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="hexValue">#3B82F6</div>
+                        <div class="format-description">Hexadecimal notation</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">Short HEX</h3>
+                            <button class="copy-btn" data-format="shortHex" title="Copy Short HEX">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="shortHexValue">N/A</div>
+                        <div class="format-description">Compressed hex format</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">RGB</h3>
+                            <button class="copy-btn" data-format="rgb" title="Copy RGB">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="rgbValue">rgb(59, 130, 246)</div>
+                        <div class="format-description">Red, Green, Blue (0-255)</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">RGB Decimal</h3>
+                            <button class="copy-btn" data-format="rgbDecimal" title="Copy RGB Decimal">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="rgbDecimalValue">59, 130, 246</div>
+                        <div class="format-description">Comma-separated values</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">RGB Percent</h3>
+                            <button class="copy-btn" data-format="rgbPercent" title="Copy RGB Percent">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="rgbPercentValue">23%, 51%, 96%</div>
+                        <div class="format-description">Percentage values</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">HSL</h3>
+                            <button class="copy-btn" data-format="hsl" title="Copy HSL">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="hslValue">hsl(217, 91%, 60%)</div>
+                        <div class="format-description">Hue, Saturation, Lightness</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">HSV</h3>
+                            <button class="copy-btn" data-format="hsv" title="Copy HSV">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="hsvValue">hsv(217, 76%, 96%)</div>
+                        <div class="format-description">Hue, Saturation, Value</div>
+                    </div>
+
+                    <div class="format-card">
+                        <div class="format-header">
+                            <h3 class="format-title">CMYK</h3>
+                            <button class="copy-btn" data-format="cmyk" title="Copy CMYK">
+                                <span class="copy-icon">📋</span>
+                            </button>
+                        </div>
+                        <div class="format-value" id="cmykValue">cmyk(76%, 47%, 0%, 4%)</div>
+                        <div class="format-description">Cyan, Magenta, Yellow, Black</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Color Preview Section -->
+            <section class="color-preview-section">
+                <h2 class="section-title">Color Previews</h2>
+                <div class="preview-grid">
+                    <div class="preview-card">
+                        <h3 class="preview-title">Background Previews</h3>
+                        <div class="background-previews">
+                            <div class="bg-preview bg-white" id="bgPreviewWhite">Sample Text</div>
+                            <div class="bg-preview bg-black" id="bgPreviewBlack">Sample Text</div>
+                            <div class="bg-preview bg-gray" id="bgPreviewGray">Sample Text</div>
+                        </div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h3 class="preview-title">Typography Preview</h3>
+                        <div class="typography-preview" id="typographyPreview">
+                            <h1 class="preview-heading">Heading Text</h1>
+                            <p class="preview-paragraph">This is how paragraph text looks in the selected color.</p>
+                            <a href="#" class="preview-link">Link Example</a>
+                        </div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h3 class="preview-title">Gradient Preview</h3>
+                        <div class="gradient-preview" id="gradientPreview"></div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h3 class="preview-title">CSS Box Preview</h3>
+                        <div class="css-box-preview" id="cssBoxPreview">
+                            <div class="sample-box">UI Element</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Color Analysis Section -->
+            <section class="color-analysis-section">
+                <h2 class="section-title">Color Analysis</h2>
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3 class="analysis-title">Accessibility</h3>
+                        <div class="analysis-content">
+                            <div class="analysis-item">
+                                <span class="analysis-label">Luminance:</span>
+                                <span class="analysis-value" id="luminanceValue">0.34</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Brightness:</span>
+                                <span class="analysis-value" id="brightnessValue">60%</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Contrast (vs White):</span>
+                                <span class="analysis-value" id="contrastWhiteValue">AA</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Contrast (vs Black):</span>
+                                <span class="analysis-value" id="contrastBlackValue">Poor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3 class="analysis-title">Color Properties</h3>
+                        <div class="analysis-content">
+                            <div class="analysis-item">
+                                <span class="analysis-label">Temperature:</span>
+                                <span class="analysis-value" id="temperatureValue">Cool</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Web Safe:</span>
+                                <span class="analysis-value" id="webSafeValue">#3366FF</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Named Color:</span>
+                                <span class="analysis-value" id="namedColorValue">RoyalBlue</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Inverted:</span>
+                                <span class="analysis-value" id="invertedValue">#C47D09</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Developer Tools Section -->
+            <section class="developer-tools-section">
+                <h2 class="section-title">Developer Tools</h2>
+                <div class="dev-tools-grid">
+                    <div class="dev-tool-card">
+                        <h3 class="dev-tool-title">CSS Code</h3>
+                        <div class="code-snippet" id="cssCode">
+                            <code>color: #3B82F6;</code>
+                        </div>
+                        <button class="copy-btn" data-format="css" title="Copy CSS">
+                            <span class="copy-icon">📋</span>
+                        </button>
+                    </div>
+
+                    <div class="dev-tool-card">
+                        <h3 class="dev-tool-title">Tailwind CSS</h3>
+                        <div class="code-snippet" id="tailwindCode">
+                            <code>text-[#3B82F6]</code>
+                        </div>
+                        <button class="copy-btn" data-format="tailwind" title="Copy Tailwind">
+                            <span class="copy-icon">📋</span>
+                        </button>
+                    </div>
+
+                    <div class="dev-tool-card">
+                        <h3 class="dev-tool-title">SCSS Variable</h3>
+                        <div class="code-snippet" id="scssCode">
+                            <code>$primary-color: #3B82F6;</code>
+                        </div>
+                        <button class="copy-btn" data-format="scss" title="Copy SCSS">
+                            <span class="copy-icon">📋</span>
+                        </button>
+                    </div>
+
+                    <div class="dev-tool-card">
+                        <h3 class="dev-tool-title">JSON Export</h3>
+                        <button class="export-btn" id="exportJsonBtn">
+                            <span class="btn-icon">💾</span>
+                            Export JSON
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Palette Generator Section -->
+            <section class="palette-section">
+                <h2 class="section-title">Color Palette</h2>
+                <div class="palette-controls">
+                    <button class="palette-btn" id="generateShadesBtn">Generate Shades</button>
+                    <button class="palette-btn" id="generateTintsBtn">Generate Tints</button>
+                    <button class="palette-btn" id="generateComplementaryBtn">Complementary</button>
+                    <button class="palette-btn" id="generateTriadicBtn">Triadic</button>
+                </div>
+                <div class="palette-grid" id="paletteGrid"></div>
+            </section>
+
+            <!-- Color Math Playground -->
+            <section class="color-math-section">
+                <h2 class="section-title">Color Math Playground</h2>
+                <div class="math-controls">
+                    <div class="math-group">
+                        <label class="math-label">Blend Colors</label>
+                        <div class="blend-controls">
+                            <input type="color" id="blendColor1" class="blend-picker" value="#3B82F6">
+                            <input type="range" id="blendRatio" class="blend-slider" min="0" max="100" value="50">
+                            <input type="color" id="blendColor2" class="blend-picker" value="#EF4444">
+                            <div class="blend-result" id="blendResult"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="math-group">
+                        <label class="math-label">Adjust Color</label>
+                        <div class="adjust-controls">
+                            <div class="adjust-item">
+                                <span>Lighten</span>
+                                <input type="range" id="lightenSlider" class="adjust-slider" min="-50" max="50" value="0">
+                                <span id="lightenValue">0%</span>
+                            </div>
+                            <div class="adjust-item">
+                                <span>Saturate</span>
+                                <input type="range" id="saturateSlider" class="adjust-slider" min="-50" max="50" value="0">
+                                <span id="saturateValue">0%</span>
+                            </div>
+                            <div class="adjust-item">
+                                <span>Hue Shift</span>
+                                <input type="range" id="hueSlider" class="adjust-slider" min="-180" max="180" value="0">
+                                <span id="hueValue">0°</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="math-result" id="mathResult">
+                    <div class="result-preview" id="mathResultPreview"></div>
+                </div>
+            </section>
+
+            <!-- Component Mockups -->
+            <section class="mockup-section">
+                <h2 class="section-title">Component Mockups</h2>
+                <div class="mockup-grid">
+                    <div class="mockup-card">
+                        <h3 class="mockup-title">Button Styles</h3>
+                        <div class="mockup-buttons" id="mockupButtons">
+                            <button class="mockup-btn primary">Primary Button</button>
+                            <button class="mockup-btn secondary">Secondary Button</button>
+                            <button class="mockup-btn outline">Outline Button</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mockup-card">
+                        <h3 class="mockup-title">Form Elements</h3>
+                        <div class="mockup-form" id="mockupForm">
+                            <input type="text" class="mockup-input" placeholder="Input field">
+                            <select class="mockup-select">
+                                <option>Select option</option>
+                            </select>
+                            <div class="mockup-checkbox">
+                                <input type="checkbox" id="mockupCheck">
+                                <label for="mockupCheck">Checkbox</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mockup-card">
+                        <h3 class="mockup-title">UI Cards</h3>
+                        <div class="mockup-cards" id="mockupCards">
+                            <div class="mockup-ui-card">
+                                <div class="card-header">Card Header</div>
+                                <div class="card-content">Card content with selected color theme</div>
+                                <div class="card-footer">Card Footer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personalization Dashboard -->
+            <section class="personalization-section">
+                <h2 class="section-title">Your Color Journey</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-title">Usage Stats</h3>
+                        <div class="usage-stats" id="usageStats">
+                            <div class="stat-item">
+                                <span class="stat-label">Colors explored today:</span>
+                                <span class="stat-value" id="todayCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Most used color:</span>
+                                <span class="stat-value" id="mostUsedColor">#3B82F6</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Color streak:</span>
+                                <span class="stat-value" id="colorStreak">1 day</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3 class="stat-title">Color of the Day</h3>
+                        <div class="daily-color" id="dailyColor">
+                            <div class="daily-swatch" id="dailySwatch"></div>
+                            <div class="daily-info">
+                                <div class="daily-name" id="dailyName">Royal Blue</div>
+                                <div class="daily-hex" id="dailyHex">#4169E1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mood-based Color Picker -->
+            <section class="mood-section">
+                <h2 class="section-title">Mood-based Color Picker</h2>
+                <div class="mood-quiz">
+                    <div class="mood-question">
+                        <h3>How are you feeling today?</h3>
+                        <div class="mood-options">
+                            <button class="mood-btn" data-mood="energetic">⚡ Energetic</button>
+                            <button class="mood-btn" data-mood="calm">🧘 Calm</button>
+                            <button class="mood-btn" data-mood="creative">🎨 Creative</button>
+                            <button class="mood-btn" data-mood="focused">🎯 Focused</button>
+                            <button class="mood-btn" data-mood="happy">😊 Happy</button>
+                            <button class="mood-btn" data-mood="mysterious">🌙 Mysterious</button>
+                        </div>
+                    </div>
+                    <div class="mood-result" id="moodResult">
+                        <p>Select a mood to see color suggestions!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <span class="toast-message">Copied to clipboard!</span>
+        </div>
+
+        <!-- Keyboard Shortcuts Help -->
+        <div class="shortcuts-help" id="shortcutsHelp">
+            <h3>Keyboard Shortcuts</h3>
+            <div class="shortcuts-list">
+                <div class="shortcut-item">
+                    <kbd>R</kbd> <span>Random Color</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>I</kbd> <span>Invert Color</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>Ctrl+C</kbd> <span>Copy HEX</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>T</kbd> <span>Toggle Theme</span>
+                </div>
+                <div class="shortcut-item">
+                    <kbd>?</kbd> <span>Show/Hide Help</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load scripts in correct order -->
+    <script src="src/js/colorConverter.js"></script>
+    <script src="src/js/colorAnalysis.js"></script>
+    <script src="src/js/colorMath.js"></script>
+    <script src="src/js/paletteGenerator.js"></script>
+    <script src="src/js/colorPersonalization.js"></script>
+    <script src="src/js/colorExporter.js"></script>
+    <script src="src/js/app.js"></script>
+</body>
+</html>
