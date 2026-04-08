@@ -21,7 +21,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Deploy to S3
+       - name: Deploy to S3
         run: |
-          # "." refers to the current folder where your code was checked out
-          aws s3 sync . s3://${{ secrets.S3_BUCKET }} --delete
+          # Sync only the folder containing your index.html
+          aws s3 sync ./Color-Inspector-Pro-main s3://${{ secrets.S3_BUCKET }} --delete
